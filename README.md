@@ -1,4 +1,4 @@
-# Phase2.1DataRPackage
+# Phase2.1DataRPackage (without running Docker)
 This repository contains R functions for Phase 2.1 Data Pre-Processing for the 4CE Consortium.
 
 # Installation
@@ -6,7 +6,7 @@ This repository contains R functions for Phase 2.1 Data Pre-Processing for the 4
 To install this package in R:
 
 ``` R
-devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
+devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", ref="no-docker", upgrade=FALSE)
 ```
 
 # 4CE Phase 2.1 Data Pre-Processing Overview
@@ -71,15 +71,12 @@ The R library (`FourCePhase2.1Data`) in this repository also contains functions 
 
 # Get Started
 
-1. Run the Docker container and launch the localhost Rstudio. The details can be found in (https://github.com/covidclinical/Phase2.1DockerAnalysis).
-
-
-2. Install and load the R package:
+1. Install and load the R package:
 
 ``` R
-devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", upgrade=FALSE)
+devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage", subdir="FourCePhase2.1Data", ref="no-docker", upgrade=FALSE)
 ```
-3. Store the Phase1.1 data and Phase2.1 data in the /4ceData/Input directory that is mounted to the container. The list of .csv files is as follows:
+2. Store the Phase1.1 data and Phase2.1 data in an input directory. The list of .csv files is as follows:
 ## Phase 1.1
 + Labs-[siteid].csv
 + Medications-[siteid].csv
@@ -95,20 +92,21 @@ devtools::install_github("https://github.com/covidclinical/Phase2.1DataRPackage"
 
 The above files are outputs Phase2.1SqlDataExtract (https://github.com/covidclinical/Phase2.1SqlDataExtraction). Make sure you have the correct file names. 
 
-4. Conduct QC. 
+3. Conduct QC. 
 ``` R
-currSiteId = FourCePhase2.1Data::getSiteId()
-FourCePhase2.1Data::runQC(currSiteId)
+siteid=[your siteid]
+dir.input=[your input directory]
+FourCePhase2.1Data::runQC(siteid, dir.input)
 ```
 
-5. If the above steps have worked correctly (no matter issues identified or not), you should be able to see the following QC reports in the /4ceData/Input directory:
+4. If the above steps have worked correctly (no matter issues identified or not), you should be able to see the following QC reports in the /4ceData/Input directory:
 
 + Phase1.1DataQCReport.[siteid].doc
 + Phase2.1DataQCReport.[siteid].doc
 
 **If there is any issue identified in Step 5, besides the QC reports, there will be an error message returned by the function. Please fix the issue before going to Data Pivot or downstream analysis.**
 
-6. Data Pivot. Please note the Data Pivot step is option. You can either use functions in this package to generate data pivot or use your own funciton. The list of data pivots is as follows:
+5. Data Pivot. Please note the Data Pivot step is option. You can either use functions in this package to generate data pivot or use your own funciton. The list of data pivots is as follows:
 
 + Labs_Longitudinal
 + Medications_Longitudinal
@@ -125,7 +123,7 @@ dat.eventime=pivotData_EventTime(siteid)
 
 ```
 
-7. Save the data pivot to an output directory. In this example, the output directory was set as "/4ceData/Output", but feel free to specify your own output directory:
+6. Save the data pivot to an output directory. In this example, the output directory was set as "/4ceData/Output", but feel free to specify your own output directory:
 
 ``` R
 dir.output="/4ceData/Output/"
@@ -133,7 +131,7 @@ write.csv(dat.lab, paste0(dir.output,"Phase2.1DataPivot_Labs_Longitudinal.csv", 
 ```
 Similary to dat.med, dat.diag, dat.baseline and dat.event. 
 
-9. If step 6 has worked correctly, you should be able to see the following files in the output directory:
+7. If step 6 has worked correctly, you should be able to see the following files in the output directory:
 + Phase2.1DataPivot_Labs_Longitudinal.csv
 + Phase2.1DataPivot_Medications_Longitudinal.csv
 + Phase2.1DataPivot_Diagnoses_Longitudinal.csv
