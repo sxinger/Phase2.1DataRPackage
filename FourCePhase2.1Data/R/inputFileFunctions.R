@@ -7,7 +7,8 @@
 #' @export
 
 get4ceRootDirectoryName <- function() {
-    return("/4ceData")
+    # assume accessing root directory, not usually available on data server
+    return("~/4ceData")
 }
 
 #' Returns the name of the directory where site input data is expected to reside.
